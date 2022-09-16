@@ -76,3 +76,4 @@ distancia_percorrida = []
 caxeiro_viajante_hamiltoniano(matriz_distancia, visitados, inicio, tamanho, 1, 0)
 
 print(min(distancia_percorrida))
+print(visitados)    # Tentar colocar a ordem dos visitados numa variavel
