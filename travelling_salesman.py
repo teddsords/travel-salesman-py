@@ -2,7 +2,7 @@
 # Por: George Borba e Teddy Ordoñez
 # V 1.0
 from sys import maxsize
-
+'''
 def caxeiro_viajante(matriz_distancia, inicio, tamanho):
     vertices = []
     vertices.append(inicio)
@@ -51,12 +51,28 @@ def outro_caminho(vertices):
         esquerda += 1
         direita -= 1
     return True
+'''
 
-matriz_distancia = [[0,10,15,20],
-                    [10,0,35,25],
-                    [15,35,0,30],
-                    [20,25,30,0]]
+def caxeiro_viajante_hamiltoniano(grafo, visitados, posicao_atual, tamanho, contador, custo):
+    if (contador == tamanho and grafo[posicao_atual][0]):
+        distancia_percorrida.append(custo + grafo[posicao_atual][0])
+        return
+
+    for i in range(tamanho):
+        if (visitados[i] == False and grafo[posicao_atual][i]):
+            visitados[i] =  True
+            caxeiro_viajante_hamiltoniano(grafo, visitados, i, tamanho, contador + 1, custo + grafo[posicao_atual][i])
+            visitados[i] = False
+
+matriz_distancia = [[ 0, 10, 15, 20 ],
+                    [ 10, 0, 35, 25 ],
+                    [ 15, 35, 0, 30 ],
+                    [ 20, 25, 30, 0 ]]
 tamanho = 4
 inicio = 0
-distancia_percorrida, caminho = caxeiro_viajante(matriz_distancia, inicio, tamanho)
-print(f'Distancia minima: {distancia_percorrida} \nCaminho Percorrido: {caminho}')
+visitados = [False for i in range(tamanho)]
+distancia_percorrida = []
+
+caxeiro_viajante_hamiltoniano(matriz_distancia, visitados, inicio, tamanho, 1, 0)
+
+print(min(distancia_percorrida))
