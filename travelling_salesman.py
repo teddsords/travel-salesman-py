@@ -2,6 +2,7 @@
 # Por: George Borba e Teddy Ordoñez
 # V 1.0
 from sys import maxsize
+import numpy as np
 '''
 MÉTODO DE FORÇA BRUTA APLICANDO DFS
 def caxeiro_viajante_hamiltoniano(grafo, visitados, posicao_cidade_atual, tamanho, contador, custo):
@@ -83,25 +84,28 @@ def criacao_matriz_distancia(problema):
 
     tamanho = int(temp.pop(0))
     matriz_distancia = [[0 for _ in range(tamanho)] for _ in range(tamanho)]
+    
     k = 0   # Contador para percorrer o vetor com os pesos das cidades
-
     for i in range(tamanho):
         for j in range(tamanho):
             if i != j and j > i:
-                matriz_distancia[i][j] = int(temp[k])
+                v = int(temp[k])
+                matriz_distancia[i][j] = v 
                 k += 1
             matriz_distancia[j][i] = matriz_distancia[i][j]
 
-    print(matriz_distancia)
     f.close()
 
     return matriz_distancia
 
 if __name__ == '__main__':
 
-    id_problema = int(input('Que problema você deseja resolver?\n1) 5 cidades\n2) 4 cidades\n3) 35 cidades\n'))
+    id_problema = int(input('Que problema você deseja resolver?\n1) 5 cidades\n2) 4 cidades\n3) 35 cidades \nDigite: '))
 
     matriz_distancia = criacao_matriz_distancia(id_problema)
+    print("Matriz distância")
+    print(np.array(matriz_distancia))
+    
     custo, rota = vizinho_mais_proximo(matriz_distancia)
 
     print('Rota percorrida:', rota)
