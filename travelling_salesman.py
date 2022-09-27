@@ -29,56 +29,80 @@ caxeiro_viajante_hamiltoniano(matriz_distancia, visitados, inicio, tamanho, 1, 0
 print(min(distancia_percorrida))
 print(visitados)    # Tentar colocar a ordem dos visitados numa variavel
 '''
+
 # MÉTODO COM HEURISTÍCA DO VIZINHO MAIS PRÓXIMO
+def vizinho_mais_proximo(matriz_distancia):
+    visitados = [False for i in range(len(matriz_distancia))]
+    rota = [0]
 
-matriz_distancia = [[0, 15, 12, 60, 38, 90],
-                    [15, 0, 76, 19, 40, 7],
-                    [12, 76, 0, 81, 33, 24],
-                    [60, 19, 81, 0, 51, 45],
-                    [38, 40, 33, 51, 0, 30],
-                    [90, 7, 24, 45, 30, 0]]
+    # salva elemento inicial
+    elemento_inicial = 0
 
-visitados = [False for i in range(len(matriz_distancia))]
-rota = [0]
+    # variavel para armazenar elemento cidade_atual
+    cidade_atual = elemento_inicial
+    # marca cidade_atual como visitado
+    visitados[cidade_atual] = True 
 
-# salva elemento inicial
-elemento_inicial = 0
+    # Custo da rota
+    custo = 0
 
-# variavel para armazenar elemento cidade_atual
-cidade_atual = elemento_inicial
-# marca cidade_atual como visitado
-visitados[cidade_atual] = True 
-
-# Custo da rota
-custo = 0
-
-while False in visitados: # enquanto houver elemento não visitado    
-    menor_distancia = maxsize # valor da menor distância
-    indice_do_elemento = -1 # indice do elemento de menor distância
-    for j in range(0, len(matriz_distancia[0])):
-        
-        # se não é o próprio elemento e não foi visitado
-        if cidade_atual != j and (not visitados[j]):
+    while False in visitados: # enquanto houver elemento não visitado    
+        menor_distancia = maxsize # valor da menor distância
+        indice_do_elemento = -1 # indice do elemento de menor distância
+        for j in range(0, len(matriz_distancia[0])):
             
-            # verifica se a distância é menor q a menor distância
-            if matriz_distancia[cidade_atual][j] < menor_distancia:
-                menor_distancia = matriz_distancia[cidade_atual][j]
+            # se não é o próprio elemento e não foi visitado
+            if cidade_atual != j and (not visitados[j]):
                 
-                indice_do_elemento = j
-    
-    # atribui novo cidade_atual
-    cidade_atual = indice_do_elemento
-    # marca como visitado
-    visitados[cidade_atual] = True
-    # Soma o custo de visitar a cidade
-    custo += menor_distancia
-    # adiciona à rota
-    rota.append(cidade_atual)
+                # verifica se a distância é menor q a menor distância
+                if matriz_distancia[cidade_atual][j] < menor_distancia:
+                    menor_distancia = matriz_distancia[cidade_atual][j]
+                    
+                    indice_do_elemento = j
+        
+        # atribui novo cidade_atual
+        cidade_atual = indice_do_elemento
+        # marca como visitado
+        visitados[cidade_atual] = True
+        # Soma o custo de visitar a cidade
+        custo += menor_distancia
+        # adiciona à rota
+        rota.append(cidade_atual)
 
-# retorna ao elemento inicial    
-rota.append(elemento_inicial)
-# Soma o custo de voltar à cidade inicial
-custo += matriz_distancia[cidade_atual][elemento_inicial]    
+    # retorna ao elemento inicial    
+    rota.append(elemento_inicial)
+    # Soma o custo de voltar à cidade inicial
+    custo += matriz_distancia[cidade_atual][elemento_inicial]
 
-print('Rota percorrida:', rota)
-print('Custo dessa rota:', custo)
+    return custo, rota
+
+def criacao_matriz_distancia(problema):
+    f = open('distancias1.txt', 'r')
+    file_data = f.read().splitlines()
+    temp = file_data[problema - 1].split(";")
+
+    tamanho = int(temp.pop(0))
+    matriz_distancia = [[0 for _ in range(tamanho)] for _ in range(tamanho)]
+    k = 0   # Contador para percorrer o vetor com os pesos das cidades
+
+    for i in range(tamanho):
+        for j in range(tamanho):
+            if i != j and j > i:
+                matriz_distancia[i][j] = int(temp[k])
+                k += 1
+            matriz_distancia[j][i] = matriz_distancia[i][j]
+
+    print(matriz_distancia)
+    f.close()
+
+    return matriz_distancia
+
+if __name__ == '__main__':
+
+    id_problema = int(input('Que problema você deseja resolver?\n1) 5 cidades\n2) 4 cidades\n3) 35 cidades\n'))
+
+    matriz_distancia = criacao_matriz_distancia(id_problema)
+    custo, rota = vizinho_mais_proximo(matriz_distancia)
+
+    print('Rota percorrida:', rota)
+    print('Custo dessa rota:', custo)
